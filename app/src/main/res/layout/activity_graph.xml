@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+tools:context=".activities.GraphActivity">
+
+<TextView
+    android:id="@+id/stockNameTextView"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_centerHorizontal="true"
+    android:layout_marginTop="50dp"
+    android:gravity="center"
+    android:text="Stock Name"
+    android:textSize="20sp" />
+
+<LinearLayout
+    android:id="@+id/timeframeSelection"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_centerHorizontal="true"
+    android:layout_below="@+id/stockNameTextView"
+    android:orientation="horizontal"
+    android:layout_marginTop="10dp"
+    android:layout_marginBottom="10dp">
+
+    <TextView
+        android:id="@+id/oneDayButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="1D"
+        android:padding="5dp"
+        android:clickable="true"
+        android:textColor="@android:color/black" />
+
+    <TextView
+        android:id="@+id/oneWeekButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="1W"
+        android:padding="5dp"
+        android:clickable="true"
+        android:textColor="@android:color/black" />
+
+    <TextView
+        android:id="@+id/oneMonthButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="1M"
+        android:padding="5dp"
+        android:clickable="true"
+        android:textColor="@android:color/black" />
+
+    <TextView
+        android:id="@+id/threeMonthsButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="3M"
+        android:padding="5dp"
+        android:clickable="true"
+        android:textColor="@android:color/black" />
+
+    <TextView
+        android:id="@+id/sixMonthsButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="6M"
+        android:padding="5dp"
+        android:clickable="true"
+        android:textColor="@android:color/black" />
+
+    <TextView
+        android:id="@+id/oneYearButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="1Y"
+        android:padding="5dp"
+        android:clickable="true"
+        android:textColor="@android:color/black" />
+
+    <TextView
+        android:id="@+id/maxButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="MAX"
+        android:padding="5dp"
+        android:clickable="true"
+        android:textColor="@android:color/black" />
+
+</LinearLayout>
+
+<com.github.mikephil.charting.charts.LineChart
+    android:id="@+id/chart"
+    android:layout_width="match_parent"
+    android:layout_height="367dp"
+    android:layout_below="@+id/timeframeSelection"
+    android:layout_marginTop="10dp" />
+
+</RelativeLayout>

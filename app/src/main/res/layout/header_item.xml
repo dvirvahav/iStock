@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/colorPrimary"
+    android:orientation="horizontal"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/symbolHeader"
+        android:layout_width="93dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="Symbol"
+        android:textColor="@color/white"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/priceHeader"
+        android:layout_width="4dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="Price"
+        android:textColor="@color/white"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/dailyChangeHeader"
+        android:layout_width="26dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="Daily Change"
+        android:textColor="@color/white"
+        android:textSize="16sp" />
+</LinearLayout>

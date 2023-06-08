@@ -1,43 +1,51 @@
 package com.example.stockdata.activities;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.stockdata.api.StockManager;
 import com.example.stockdata.utils.MySharedPreferences;
 import com.example.stockdata.R;
 import com.example.stockdata.models.Stock;
-import com.example.stockdata.adapters.StockAdapter;
-import com.example.stockdata.api.StockApi;
-import com.example.stockdata.api.StockApiImpl;
+import com.example.stockdata.adapters.StockRecyclerViewAdapter;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-
+import java.util.Set;
 
 
 public class MainActivity extends AppCompatActivity {
 
-    private StockAdapter adapter;
-    private StockApi stockApi;
-    private final List<Stock> stocks = new ArrayList<>();
-    private MySharedPreferences mySharedPreferences ;
-    private List<String> myList ;
+    private StockRecyclerViewAdapter adapter;
+    private  List<Stock> stocks = new ArrayList<>();
+    private StockManager stockManager;
+    private List<String> myList;
     private final Handler handler = new Handler();
 
     private final Runnable fetchStocksRunnable = new Runnable() {
+        @RequiresApi(api = Build.VERSION_CODES.O)
         @Override
         public void run() {
+            LocalDateTime now = LocalDateTime.now();
+            String currentTime = now.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+            System.out.println("Current update: " + currentTime);
             for (String symbol : myList) {
-                fetchAndDisplayStock(symbol);
+                System.out.println("Update stock: " + symbol);
+                stockManager.fetchAndDisplayStock(symbol);
             }
-            handler.postDelayed(this, 10*60000); // Schedule the next execution after 10 minutes.
+            handler.postDelayed(this, 1*60000); // Schedule the next execution after 10 minutes.
         }
     };
 
@@ -47,10 +55,14 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        stockApi = StockApiImpl.getInstance();
-        mySharedPreferences = new MySharedPreferences(getApplicationContext());
+        MySharedPreferences mySharedPreferences = new MySharedPreferences(getApplicationContext());
+        myList = new ArrayList<>();
         myList = mySharedPreferences.getList();
+        System.out.println("Local memory: " +  myList);
+
+
         Button removeAllStocks = findViewById(R.id.removeAllStocks);
+
         EditText stockInput = findViewById(R.id.stockInput);
         Button addStock = findViewById(R.id.addStock);
 
@@ -59,21 +71,21 @@ public class MainActivity extends AppCompatActivity {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
 
-        adapter = new StockAdapter(stocks, this::removeStock);
+        adapter = new StockRecyclerViewAdapter(stocks, this::removeStock);
         recyclerView.setAdapter(adapter);
 
-        startFetchingStocks();
+        stockManager = new StockManager(this, mySharedPreferences, handler, fetchStocksRunnable, stocks, adapter);
+
+        stockManager.startFetchingStocks();
 
         addStock.setOnClickListener(v -> {
-            String symbol = stockInput.getText().toString();
-
-            if (!myList.contains(symbol)) {
-                fetchAndDisplayStock(symbol);
+            String symbol = stockInput.getText().toString().toLowerCase();
+            if (!myList.contains(symbol.toLowerCase())) {
+                stockManager.fetchAndDisplayStock(symbol);
                 stockInput.getText().clear();
             }
             else{
                 Toast.makeText(MainActivity.this, "Stock is already on your list", Toast.LENGTH_SHORT).show();
-
             }
         });
 
@@ -85,70 +97,22 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public void fetchAndDisplayStock(String symbol) {
-        stockApi.fetchStockData(symbol, new StockApi.StockDataCallback() {
-            @SuppressLint("NotifyDataSetChanged")
-            @Override
-            public void onDataReceived(Stock stock) {
-                if (stock != null) {
-                    runOnUiThread(() -> {
-                        // Check if the stock symbol already exists in the list
-                        Stock existingStock = findStockBySymbol(symbol);
-                        if (existingStock != null) {
-                            // Stock symbol already exists, update price and daily change
-                            existingStock.setPrice(stock.getPrice());
-                            existingStock.setDailyChange(stock.getDailyChange());
-                        } else {
-                            // Stock symbol is new, create a new Stock object and add it to the list
-                            stocks.add(stock);
-                            mySharedPreferences.addToList(symbol);
-                        }
-
-                        adapter.notifyDataSetChanged();
-                    });
-                }
-            }
-
-            @Override
-            public void onError(Exception e) {
-                runOnUiThread(() -> Toast.makeText(MainActivity.this, "No such stock symbol / too many requests", Toast.LENGTH_SHORT).show());
-            }
-        });
-    }
-
-    @SuppressLint("NotifyDataSetChanged")
     private void removeStock(Stock stock) {
-        stocks.remove(stock);
-        myList.remove(stock.getSymbol());
-        mySharedPreferences.removeFromList(stock.getSymbol());
+        stockManager.removeStock(stock);
+    }
+    public void refreshAdapter() {
         adapter.notifyDataSetChanged();
     }
 
-    // Call this method to start the execution
-    private void startFetchingStocks() {
-        handler.postDelayed(fetchStocksRunnable, 0); // Initial execution with no delay
-    }
-    // Call this method to stop the execution
-    private void stopFetchingStocks() {
-        handler.removeCallbacks(fetchStocksRunnable);
-    }
-    // Helper method to find a stock by symbol
-    private Stock findStockBySymbol(String symbol) {
-        for (Stock stock : stocks) {
-            if (stock.getSymbol().equals(symbol)) {
-                return stock;
-            }
-        }
-        return null;
-    }
-    @Override
-    protected void onDestroy() {
+    public void onDestroy() {
         super.onDestroy();
-        stopFetchingStocks();
+        stockManager.stopFetchingStocks();
     }
-
 
 }
+
+
+
 
 
 

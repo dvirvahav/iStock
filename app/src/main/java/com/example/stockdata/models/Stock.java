@@ -1,28 +1,27 @@
 package com.example.stockdata.models;
 
 public class Stock {
-    private String symbol;
+    private final String symbol;
     private String price;
     private String dailyChange;
-    private String companyName;
-    private Stock(String symbol, String price, String dailyChange,String companyName) {
+    private final String companyName;
+    private final String companyIcon;  // Changed this line
+
+    private Stock(String symbol, String price, String dailyChange, String companyName, String companyIcon) { // Changed this line
         this.symbol = symbol;
         this.price = price;
         this.dailyChange = dailyChange;
         this.companyName = companyName;
+        this.companyIcon = companyIcon;  // Changed this line
     }
 
     // Factory method for creating instances
-    public static Stock createStock(String symbol, String price, String dailyChange,String companyName) {
-        return new Stock(symbol, price, dailyChange,companyName);
+    public static Stock createStock(String symbol, String price, String dailyChange, String companyName, String companyIcon) { // Changed this line
+        return new Stock(symbol, price, dailyChange, companyName, companyIcon); // Changed this line
     }
 
     public String getCompanyName() {
         return companyName;
-    }
-
-    public void setCompanyName(String companyName) {
-        this.companyName = companyName;
     }
 
     public String getSymbol() {
@@ -35,6 +34,10 @@ public class Stock {
 
     public String getDailyChange() {
         return dailyChange;
+    }
+
+    public String getCompanyIcon() {  // Changed this method
+        return companyIcon;
     }
 
     public void setPrice(String price) {

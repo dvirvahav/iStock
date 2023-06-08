@@ -4,7 +4,12 @@ xmlns:tools="http://schemas.android.com/tools"
 android:layout_width="match_parent"
 android:layout_height="match_parent"
 tools:context=".activities.GraphActivity">
-
+    <ImageView
+        android:id="@+id/companyIconImageView"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="10dp"
+        android:layout_centerHorizontal="true" />
 <TextView
     android:id="@+id/stockNameTextView"
     android:layout_width="wrap_content"
@@ -90,11 +95,12 @@ tools:context=".activities.GraphActivity">
 
 </LinearLayout>
 
-<com.github.mikephil.charting.charts.LineChart
-    android:id="@+id/chart"
-    android:layout_width="match_parent"
-    android:layout_height="367dp"
-    android:layout_below="@+id/timeframeSelection"
-    android:layout_marginTop="10dp" />
+    <com.github.mikephil.charting.charts.LineChart
+        android:id="@+id/chart"
+        android:layout_width="match_parent"
+        android:layout_height="367dp"
+        android:layout_below="@+id/timeframeSelection"
+        android:layout_marginTop="10dp" />
+
 
 </RelativeLayout>

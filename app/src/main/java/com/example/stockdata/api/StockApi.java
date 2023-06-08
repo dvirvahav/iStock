@@ -7,7 +7,7 @@ import org.json.JSONObject;
 
 public interface StockApi {
     void fetchStockData(String symbol, StockDataCallback callback);
-    void fetchHistoricalWeeklyData(String symbol, WeeklyDataCallback callback);
+    void fetchHistoricalData(String symbol, HistoricalDataCallback callback);
 
 
 
@@ -16,7 +16,7 @@ public interface StockApi {
         void onError(Exception e);
     }
 
-    interface WeeklyDataCallback {
+    interface HistoricalDataCallback {
         void onDataReceived(JSONObject weeklyData) throws JSONException;
         void onError(Exception e);
     }

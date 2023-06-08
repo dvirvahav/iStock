@@ -1,11 +1,11 @@
 package com.example.stockdata.models;
 
-public class WeeklyData {
+public class HistoricalData {
 
     private float close;
     private float time;
 
-    public WeeklyData(float close, float time) {
+    public HistoricalData(float close, float time) {
         this.close = close;
         this.time = time;
     }
@@ -13,16 +13,13 @@ public class WeeklyData {
     public float getClose() {
         return close;
     }
-
-    public void setClose(float close) {
-        this.close = close;
+    // Factory method for creating instances
+    public static HistoricalData createHistoricalData(float close, float time) {
+        return new HistoricalData(close,time);
     }
-
     public float getTime() {
         return time;
     }
 
-    public void setTime(long time) {
-        this.time = time;
-    }
+
 }

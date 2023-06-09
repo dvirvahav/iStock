@@ -1,7 +1,6 @@
 # Stock Data Visualization App
 
-![image](https://github.com/dvirvahav/iStock/assets/55157743/dff31a5e-1d47-44b1-acc5-2db5a7f4922b)
-
+![demo](https://github.com/dvirvahav/iStock/assets/55157743/e78da8d4-f17e-4308-8c0f-2fbc51e24f55)
 
 This Android app allows users to visualize historical stock data using interactive charts. 
 
